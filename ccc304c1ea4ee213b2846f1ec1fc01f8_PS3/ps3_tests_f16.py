@@ -6,9 +6,7 @@ import threading
 import traceback
 import unittest
 import random
-import imp
-
-test = imp.load_compiled("test", "test.pyc")
+import test
 import ps3
 
 def xyrange(x_upper_bound, y_upper_bound):
