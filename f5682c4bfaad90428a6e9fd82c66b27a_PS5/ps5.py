@@ -7,9 +7,15 @@
 from cProfile import label
 from statistics import mean
 from numpy import average
-import numpy
 import pylab
 import re
+import sklearn.metrics
+import numpy as np
+import pandas as pd
+from datetime import datetime
+import seaborn as sns
+import pylab
+
 
 # cities in our weather data
 CITIES = [
@@ -188,10 +194,16 @@ def r_squared(y, estimated):
     Returns:
         a float for the R-squared error term
     """
-    Error_in_estimate=((y-estimated)**2).sum()
-    Variability_in_measured_data=((y-y.mean())**2).sum()
-    Rsqr=1-Error_in_estimate/Variability_in_measured_data
-    return Rsqr
+    ## This is how we build the function based on the formula
+    # Error_in_estimate=((y-estimated)**2).sum()
+    # Variability_in_measured_data=((y-y.mean())**2).sum()
+    # Rsqr=1-Error_in_estimate/Variability_in_measured_data
+    # return Rsqr
+    
+    ##Use sklearn
+    R2=sklearn.metrics.r2_score(y,estimated)
+    return R2
+
     
 
 def evaluate_models_on_training(x, y, models):
@@ -335,7 +347,7 @@ def gen_std_devs(climate, multi_cities, years):
             all_cities_yearly_temp.append(year_data)
         all_cities_yearly_temp = pylab.array(all_cities_yearly_temp)   # converting list to an array.
         daily_mean = all_cities_yearly_temp.mean(axis=0) 
-        std=numpy.std(daily_mean)
+        std=np.std(daily_mean)
         annual_std_dev.append(std)
     return pylab.array(annual_std_dev)
 
@@ -381,49 +393,49 @@ if __name__ == '__main__':
 
 
     # Part A.4
-    # data_file=Climate("data.csv")
-    # tempt_list=[]
-    # for year in TRAINING_INTERVAL:
-    #     tempt=data_file.get_daily_temp("NEW YORK",1,10,year)
-    #     tempt_list.append(tempt)
-    # tempt_array=pylab.array(tempt_list)
-    # coes=generate_models(pylab.array(TRAINING_INTERVAL),tempt_array,[1])
-    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),tempt_array,coes)
+    data_file=Climate("data.csv")
+    tempt_list=[]
+    for year in TRAINING_INTERVAL:
+        tempt=data_file.get_daily_temp("NEW YORK",1,10,year)
+        tempt_list.append(tempt)
+    tempt_array=pylab.array(tempt_list)
+    coes=generate_models(pylab.array(TRAINING_INTERVAL),tempt_array,[1])
+    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),tempt_array,coes)
     
-    # data_file=Climate("data.csv")
-    # tempt_list=[]
-    # for year in TRAINING_INTERVAL:
-    #     temptlist=data_file.get_yearly_temp("NEW YORK",year)
-    #     tmp_avg=average(temptlist)
-    #     tempt_list.append(tmp_avg)
-    # tempt_array=pylab.array(tempt_list)
-    # coes2=generate_models(pylab.array(TRAINING_INTERVAL),tempt_array,[1])
-    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),tempt_array,coes2)
+    data_file=Climate("data.csv")
+    tempt_list=[]
+    for year in TRAINING_INTERVAL:
+        temptlist=data_file.get_yearly_temp("NEW YORK",year)
+        tmp_avg=average(temptlist)
+        tempt_list.append(tmp_avg)
+    tempt_array=pylab.array(tempt_list)
+    coes2=generate_models(pylab.array(TRAINING_INTERVAL),tempt_array,[1])
+    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),tempt_array,coes2)
 
     
-    # # Part B
-    # year_avg=gen_cities_avg(data_file,CITIES,TRAINING_INTERVAL)
-    # coes3=generate_models(pylab.array(TRAINING_INTERVAL),year_avg,[1])
-    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),pylab.array(year_avg),coes3)
+    # Part B
+    year_avg=gen_cities_avg(data_file,CITIES,TRAINING_INTERVAL)
+    coes3=generate_models(pylab.array(TRAINING_INTERVAL),year_avg,[1])
+    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),pylab.array(year_avg),coes3)
 
-    # # Part C
-    # data_file = Climate('data.csv')
-    # all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
-    # year_moving=moving_average(all_cities_avg,5)
-    # coes4=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1])
-    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes4)
+    # Part C
+    data_file = Climate('data.csv')
+    all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
+    year_moving=moving_average(all_cities_avg,5)
+    coes4=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1])
+    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes4)
 
     # Part D.2
-    # data_file = Climate('data.csv')
-    # all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
-    # year_moving=moving_average(all_cities_avg,5)
-    # coes5=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1,2,20])
-    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes5)
+    data_file = Climate('data.csv')
+    all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
+    year_moving=moving_average(all_cities_avg,5)
+    coes5=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1,2,20])
+    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes5)
     
-    # data_file=Climate("data.csv")
-    # test_all_cities_avg=gen_cities_avg(data_file,CITIES,TESTING_INTERVAL)
-    # test_year_moving=moving_average(test_all_cities_avg,5)
-    # evaluate_models_on_testing(TESTING_INTERVAL,test_year_moving,coes5)
+    data_file=Climate("data.csv")
+    test_all_cities_avg=gen_cities_avg(data_file,CITIES,TESTING_INTERVAL)
+    test_year_moving=moving_average(test_all_cities_avg,5)
+    evaluate_models_on_testing(TESTING_INTERVAL,test_year_moving,coes5)
 
     # Part E
     data_file=Climate("data.csv")
@@ -431,3 +443,29 @@ if __name__ == '__main__':
     moving_avg_std=moving_average(std,5)
     coe6=generate_models(pylab.array(TRAINING_INTERVAL),moving_avg_std,[1])
     evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),moving_avg_std,coe6)
+
+
+
+
+# #I have try to use Dataframe struture to build the table.
+# # Run this code in a different file.
+
+##The following will create a table and split the date into year,month and day.
+# tempt=pd.read_csv("data.csv",parse_dates=["DATE"])
+# tempt.columns=["CITY","TEMP","DATE"]
+# tempt["YEAR"]=pd.to_datetime(tempt["DATE"]).dt.year
+# tempt["MONTH"]=pd.to_datetime(tempt["DATE"]).dt.month
+# tempt["DAY"]=pd.to_datetime(tempt["DATE"]).dt.day
+
+# #A This will plot a linear best fit line according to Jan 10 data
+# Jan_1=tempt.loc[(tempt["CITY"]=="NEW YORK") & (tempt["MONTH"]==1) &(tempt["DAY"]==10)]
+# sns.regplot(x=Jan_1["YEAR"],y=Jan_1["TEMP"],data=Jan_1)
+
+# #A  This will plot a linear best fit line according to average year data
+# Year_tempt=tempt.loc[(tempt["CITY"]=="NEW YORK") & (tempt["YEAR"]>=1961) & (tempt["YEAR"]<=2009)]
+# Year_tempt_mean=Year_tempt.groupby(Year_tempt["YEAR"]).mean()
+# sns.regplot(x=np.arange(1961,2010), y=Year_tempt_mean["TEMP"],data=Year_tempt_mean)
+# pylab.show()
+# Year_tempt.head(4)
+# Year_tempt_sample=Year_tempt.sample(100)
+# sns.relplot(x=Year_tempt_sample["DATE"],y=Year_tempt_sample["TEMP"],color="r")
