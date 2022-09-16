@@ -259,7 +259,7 @@ def simulation_without_antibiotic(num_bacteria,
             number of bacteria in trial i at time step j
     """
     play=0
-    populations=[]
+    population_in_trial=[]
     while play<num_trials:
         run=0
         population=[]
@@ -267,17 +267,17 @@ def simulation_without_antibiotic(num_bacteria,
         for i in range(num_bacteria):
             init_bacteria.append(SimpleBacteria(birth_prob,death_prob))
         Patient_with_init_bacteria=Patient(init_bacteria,max_pop)
-        population.append(Patient_with_init_bacteria.update())
+        population.append(num_bacteria)
         while run<299:
             population.append(Patient_with_init_bacteria.update())
             run+=1
-        populations.append(population)
+        population_in_trial.append(population)
         play+=1
     timestepaverage=[]
-    for i in range(len(populations[0])):
-        timestepaverage.append(calc_pop_avg(populations,i))
+    for i in range(len(population_in_trial[0])):
+        timestepaverage.append(calc_pop_avg(population_in_trial,i))
     make_one_curve_plot([i for i in range(300)],timestepaverage,"Timestep","Average bacteria numbers","Change in bacteria in 300 time steps")
-    return populations
+    return population_in_trial
 # When you are ready to run the simulation, uncomment the next line
 # simulation_without_antibiotic(100, 1000, 0.1, 0.025, 50)
 
@@ -317,6 +317,10 @@ def calc_pop_std(populations, t):
         sum+=(value-average_for_time_step)**2
     standard_deviation=(sum/num_trial)**(1/2)
     return standard_deviation
+
+    # #np.std will actually be more effient in this question:
+    # populations_array=np.array(populations)
+    # return np.std(populations_array,axis=0)
     
 
 
