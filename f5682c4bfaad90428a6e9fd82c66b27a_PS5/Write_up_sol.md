@@ -44,3 +44,44 @@ The data is even more accurate with a higher R2 value. There is less outlier.
 **Why do you think this is the case?**
 
 By looking at mean of each 5 years, we are minimizing the noise and get rid of any potiential outlier.
+
+----
+**How do these models compare to each other?**
+
+The higher the degree of freedom is, the higher accuracy the model has.
+
+----
+**Which one has the best R2 ? Why?**
+
+The last model where degreee of fit=20 has the highest R2. It is because more degree of freedom allows the curve to fit to the curver closely which reduces the error.
+
+----
+**Which model best fits the data? Why?**
+
+The last one because it has the highest R2 value which means there is less variance between the estimated values and real values.
+
+----
+**How did the different models perform? How did their RMSEs compare?**
+
+Model with degree=1 has the best RMSE, other model performed worse. The curve with degree=20 has the worst RMSE, this is because we overfitt the graph.
+
+----
+**Which model performed the best? Which model performed the worst? Are they the same as those in part D.2.I? Why?**
+
+As I said in the previous answer, degree=1 performed the best and degree=20 performed the worst. They are not the same with the training data set. It shows the one score higher in the training data will not always be the optimum one in the testing data. It is because of overfitting.
+
+----
+**If we had generated the models using the A.4.II data (i.e. average annual temperature of New York City) instead of the 5-year moving average over 22 cities, how would the prediction results 2010-2015 have changed?**
+
+The result will be less accurate and there would be a lot more noise as the New York data is more spread out compare to the 22 cities data. The RMSE of the result will probably be higher for the higher degree of freedom.
+
+----
+**Does the result match our claim (i.e., temperature variation is getting larger over these years)?**
+
+It doesn't match the claim. It seems to be the time have a negative correlation to the temperture.
+
+----
+**Can you think of ways to improve our analysis?**
+
+The relation between temperture and time is not quite a lienar relation,we should improve our analysis by trying higher degree model. We probably need more data points and a longer period for a better analysis. 
+

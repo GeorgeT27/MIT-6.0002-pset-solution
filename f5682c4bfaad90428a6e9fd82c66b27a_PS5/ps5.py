@@ -346,8 +346,8 @@ def gen_std_devs(climate, multi_cities, years):
             year_data=climate.get_yearly_temp(city,year)
             all_cities_yearly_temp.append(year_data)
         all_cities_yearly_temp = pylab.array(all_cities_yearly_temp)   # converting list to an array.
-        daily_mean = all_cities_yearly_temp.mean(axis=0) 
-        std=np.std(daily_mean)
+        year_mean = all_cities_yearly_temp.mean(axis=0) 
+        std=np.std(year_mean)
         annual_std_dev.append(std)
     return pylab.array(annual_std_dev)
 
@@ -402,48 +402,56 @@ if __name__ == '__main__':
     coes=generate_models(pylab.array(TRAINING_INTERVAL),tempt_array,[1])
     evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),tempt_array,coes)
     
-    data_file=Climate("data.csv")
-    tempt_list=[]
-    for year in TRAINING_INTERVAL:
-        temptlist=data_file.get_yearly_temp("NEW YORK",year)
-        tmp_avg=average(temptlist)
-        tempt_list.append(tmp_avg)
-    tempt_array=pylab.array(tempt_list)
-    coes2=generate_models(pylab.array(TRAINING_INTERVAL),tempt_array,[1])
-    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),tempt_array,coes2)
+    # data_file=Climate("data.csv")
+    # tempt_list=[]
+    # for year in TRAINING_INTERVAL:
+    #     temptlist=data_file.get_yearly_temp("NEW YORK",year)
+    #     tmp_avg=average(temptlist)
+    #     tempt_list.append(tmp_avg)
+    # tempt_array=pylab.array(tempt_list)
+    # coes2=generate_models(pylab.array(TRAINING_INTERVAL),tempt_array,[1])
+    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),tempt_array,coes2)
 
     
-    # Part B
-    year_avg=gen_cities_avg(data_file,CITIES,TRAINING_INTERVAL)
-    coes3=generate_models(pylab.array(TRAINING_INTERVAL),year_avg,[1])
-    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),pylab.array(year_avg),coes3)
+    # # Part B
+    # year_avg=gen_cities_avg(data_file,CITIES,TRAINING_INTERVAL)
+    # coes3=generate_models(pylab.array(TRAINING_INTERVAL),year_avg,[1])
+    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),pylab.array(year_avg),coes3)
 
-    # Part C
-    data_file = Climate('data.csv')
-    all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
-    year_moving=moving_average(all_cities_avg,5)
-    coes4=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1])
-    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes4)
+    # # Part C
+    # data_file = Climate('data.csv')
+    # all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
+    # year_moving=moving_average(all_cities_avg,5)
+    # coes4=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1])
+    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes4)
 
-    # Part D.2
-    data_file = Climate('data.csv')
-    all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
-    year_moving=moving_average(all_cities_avg,5)
-    coes5=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1,2,20])
-    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes5)
+    # # Part D.2
+    # data_file = Climate('data.csv')
+    # all_cities_avg = gen_cities_avg(data_file, CITIES, TRAINING_INTERVAL)
+    # year_moving=moving_average(all_cities_avg,5)
+    # coes5=generate_models(pylab.array(TRAINING_INTERVAL),year_moving,[1,2,20])
+    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),year_moving,coes5)
     
-    data_file=Climate("data.csv")
-    test_all_cities_avg=gen_cities_avg(data_file,CITIES,TESTING_INTERVAL)
-    test_year_moving=moving_average(test_all_cities_avg,5)
-    evaluate_models_on_testing(TESTING_INTERVAL,test_year_moving,coes5)
+    # data_file=Climate("data.csv")
+    # test_all_cities_avg=gen_cities_avg(data_file,CITIES,TESTING_INTERVAL)
+    # test_year_moving=moving_average(test_all_cities_avg,5)
+    # evaluate_models_on_testing(TESTING_INTERVAL,test_year_moving,coes5)
 
-    # Part E
-    data_file=Climate("data.csv")
-    std=gen_std_devs(data_file,CITIES,pylab.array(TRAINING_INTERVAL))
-    moving_avg_std=moving_average(std,5)
-    coe6=generate_models(pylab.array(TRAINING_INTERVAL),moving_avg_std,[1])
-    evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),moving_avg_std,coe6)
+    # # Part E
+    # data_file=Climate("data.csv")
+    # std=gen_std_devs(data_file,CITIES,pylab.array(TRAINING_INTERVAL))
+    # moving_avg_std=moving_average(std,5)
+    # coe6=generate_models(pylab.array(TRAINING_INTERVAL),moving_avg_std,[1])
+    # evaluate_models_on_training(pylab.array(TRAINING_INTERVAL),moving_avg_std,coe6)
 
+    # #Alternatively we can use pandas for Part E:
+    # annual_std_dev=[]
+    # for x in range(1961,tempt["YEAR"].max()+1):
+    #     tempt_criteria=tempt[(tempt["YEAR"]==x)]
+    #     tempt_group=tempt_criteria.groupby([tempt["YEAR"],tempt["MONTH"],tempt["DAY"]])
+    #     dailymean=tempt_group["TEMP"].mean()
+    # annual_std_dev.append(dailymean.std())
+    # sns.regplot(x=np.arange(1961,2016),y=np.array(annual_std_dev))
 
 
 
