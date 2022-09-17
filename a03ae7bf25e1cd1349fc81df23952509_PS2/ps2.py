@@ -82,54 +82,6 @@ def load_map(map_filename):
     
 
 def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,best_path):
-    path[0]=path[0]+[start]
-    if path[2]>max_dist_outdoors:
-        return None
-    if not(digraph.has_node(Node(start)) and digraph.has_node(Node(end))):
-        return KeyError ('Not a valid node!')
-    if start==end:
-        return path[0],path[1]
-    for node in digraph.get_edges_for_node(Node(start)):
-        newnode=node.get_destination().get_name()
-        if newnode not in path:
-            distance=path[1]+node.get_total_distance()
-            out_distance=path[2]+node.get_outdoor_distance()
-            renew_path=[path[0],distance,out_distance]
-            if best_path==None or renew_path[1]<best_dist:
-                newpath=get_best_path(digraph, newnode, end, renew_path, max_dist_outdoors, best_dist,best_path)
-                if newpath!=None:
-                    best_dist=newpath[1]
-                    best_path=newpath[0]
-    return best_path,best_dist
-    # if not(digraph.has_node(Node(start)) or digraph.has_node(Node(end))):
-    #         return KeyError("Node Not Present")
-    # elif start == end:
-    #         return path[0], path[1]
-    # else:
-    #         path[0].append(start)
-    #         for edge in digraph.get_edges_for_node(Node(start)):
-    #             nextNode = edge.get_destination().get_name()
-    #             # Creating a copy list for further path to avoid mutation to the original path.
-    #             newPath = [path[0].copy(), path[1] + edge.get_total_distance(), path[2] + edge.get_outdoor_distance()] 
-                
-    #             # If current path exceeds outdoor limits, move to the next path.
-    #             if newPath[2] > max_dist_outdoors:
-    #                 continue
-                
-    #             # If current path is longer than best path, move to the next path.
-    #             if best_dist is not None and newPath[1] > best_dist:
-    #                 continue
-
-    #             if nextNode not in newPath[0]:
-    #                 if nextNode is end: # Checking for loops.
-    #                     newPath[0].append(end)
-    #                     if best_dist is None or newPath[1] < best_dist:
-    #                         best_dist = newPath[1]
-    #                         best_path = newPath[0]
-    #                 else:
-    #                     best_path, best_dist = get_best_path(digraph, nextNode, end, newPath, max_dist_outdoors, best_dist, best_path)
-        
-    # return best_path, best_dist
     """
     Finds the shortest path between buildings subject to constraints.
 
@@ -161,17 +113,54 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,best_p
 
         If there exists no path that satisfies max_total_dist and
         max_dist_outdoors constraints, then return None.
-    """
+"""
+    path[0]=path[0]+[start]
+    if path[2]>max_dist_outdoors:
+        return None
+    if not(digraph.has_node(digraph.get_node(start)) and digraph.has_node(digraph.get_node(end))):
+        raise KeyError("Invalid node!")
+    elif start==end:
+            return path
+    for edge in digraph.get_edges_for_node(digraph.get_node(start)):
+        node=edge.get_destination().get_name()
+        distance=edge.get_total_distance()+path[1]
+        out_distance=edge.get_outdoor_distance()+path[2]
+        if node not in path[0]:
+            update_path=[path[0],distance,out_distance]
+            new_path=get_best_path(digraph,node,end,update_path,max_dist_outdoors,best_dist,best_path)
+            if new_path:
+                if best_path==None or new_path[1]<best_dist:
+                    best_path=new_path[0]
+                    best_dist=new_path[1]
+        else:
+            print(f'{node} is already in the path!')
+    return best_path,best_dist
     
-print(get_best_path(load_map('mit_map.txt'),'32','33',[[],0,0],100,None,None))
 
-# This implementation is almost perfect. It gives the perfect path, but in some cases, returned list 
-# has the destination missing. I tried finding the solution for that, but just couldn't
-# find it. If you find, just push the change.
-
-
-# map = load_map("testmap.txt")
-# print(get_best_path(map, '1', '4', [[], 0, 0], 99999, None, None))
+    # path[0] = path[0] + [start]   # updating list of nodes in the path.
+    # if path[2] > max_dist_outdoors:   # checking if max_dist_outdoors was exceeded. No point going deeper if so.
+    #     return None
+    # if digraph.has_node(digraph.get_node(start)) is False or digraph.has_node(digraph.get_node(end)) is False:
+    #     raise KeyError
+    # elif start == end:
+    #     return path
+    # for edge in digraph.edges[digraph.get_node(start)]:
+    #     node = edge.get_destination()
+    #     node = node.get_name()
+    #     distance = edge.get_total_distance() + path[1]   # updating total distance.
+    #     outdoors = edge.get_outdoor_distance() + path[2]   # updating outdoor distance.
+    #     if node not in path[0]:   # checking in order to avoid infinite loops.
+    #         updated_path = [path[0], distance, outdoors]
+    #         new_path = get_best_path(digraph, node, end, updated_path, max_dist_outdoors, best_dist, best_path)
+    #         if new_path:
+    #             if not best_dist or new_path[1] < best_dist:   # if distance on current path shorter than best one,
+    #                 best_path, best_dist = new_path[0], new_path[1]   # update and sign new best distance and path.
+    #     else:
+    #         print(f'{node} node is already in your path!')
+    # return best_path, best_dist
+   
+    
+# print(get_best_path(load_map('mit_map.txt'),'32','33',[[],0,0],100,None,None))
 
 
 # Problem 3c: Implement directed_dfs

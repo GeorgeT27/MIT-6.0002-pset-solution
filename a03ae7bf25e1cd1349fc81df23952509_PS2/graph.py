@@ -82,6 +82,14 @@ class Digraph(object):
     def get_edges(self):
         return self.edges
     
+    def get_node(self,name):
+        for n in self.get_nodes():
+            if n.get_name()==name:
+                return n
+        raise NameError(name)
+
+            
+    
     def __str__(self):
         edge_strs = []
         for edges in self.edges.values():
