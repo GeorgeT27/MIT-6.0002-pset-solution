@@ -400,7 +400,7 @@ class StandardRobot(Robot):
 
         if self.room.is_position_valid(new_pos):
             self.set_robot_position(new_pos)
-            RectangularRoom.clean_tile_at_position(self.room, new_pos, self.capacity)
+            self.room.clean_tile_at_position(new_pos, self.capacity)
 
         else:
             self.set_robot_direction(random.random()*360)
@@ -409,7 +409,7 @@ class StandardRobot(Robot):
 
 # Uncomment this line to see your implementation of StandardRobot in action!
 #test_robot_movement(StandardRobot, EmptyRoom)
-#test_robot_movement(StandardRobot, FurnishedRoom)
+# test_robot_movement(StandardRobot, FurnishedRoom)
 
 # === Problem 4
 class FaultyRobot(Robot):
@@ -572,4 +572,4 @@ def show_plot_room_shape(title, x_label, y_label):
 
 
 show_plot_compare_strategies('Time to clean 80% of a 20x20 room, for various numbers of robots','Number of robots','Time / steps')
-show_plot_room_shape('Time to clean 80% of a 300-tile room for various room shapes','Aspect Ratio', 'Time / steps')
+# show_plot_room_shape('Time to clean 80% of a 300-tile room for various room shapes','Aspect Ratio', 'Time / steps')
