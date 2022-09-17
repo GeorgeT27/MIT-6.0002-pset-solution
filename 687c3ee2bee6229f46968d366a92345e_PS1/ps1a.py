@@ -59,22 +59,26 @@ def greedy_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
+    sorted_cow=sorted(cows.items(),key=lambda x: x[1],reverse=True)
+    sorted_cow_dict=dict(sorted_cow)
     summary_cow_list=[]
     used_cows={}
-    
-    while len(used_cows)!=len(cows):
+    while len(used_cows)!=len(sorted_cow_dict):
         total_weight=0
         cow_trip_list=[]
-        for key in cows.keys():
+        for key in sorted_cow_dict.keys():
             if key not in used_cows.keys():
-                if cows[key]+total_weight<limit:
+                if sorted_cow_dict[key]+total_weight<=limit:
                     cow_trip_list.append(key)
-                    total_weight+=cows[key]
-                    used_cows[key]=cows[key]
+                    total_weight=total_weight+sorted_cow_dict[key]
+                    used_cows[key]=sorted_cow_dict[key]
         cow_trip_list.append(total_weight)
-        summary_cow_list.append(cow_trip_list)      
+        summary_cow_list.append(cow_trip_list)     
     return summary_cow_list
-         
+
+# #Test for greedy
+# cows = load_cows("ps1_cow_data_2.txt")
+# print(greedy_cow_transport(cows))     
 
 # Problem 3
 def brute_force_cow_transport(cows,limit=10):
@@ -146,5 +150,5 @@ def compare_cow_transport_algorithms():
     end = time.time()
     print(end - start, "seconds")
 
-compare_cow_transport_algorithms()
+# compare_cow_transport_algorithms()
 
