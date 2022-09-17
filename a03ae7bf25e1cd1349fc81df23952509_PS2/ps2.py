@@ -137,27 +137,6 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,best_p
     return best_path,best_dist
     
 
-    # path[0] = path[0] + [start]   # updating list of nodes in the path.
-    # if path[2] > max_dist_outdoors:   # checking if max_dist_outdoors was exceeded. No point going deeper if so.
-    #     return None
-    # if digraph.has_node(digraph.get_node(start)) is False or digraph.has_node(digraph.get_node(end)) is False:
-    #     raise KeyError
-    # elif start == end:
-    #     return path
-    # for edge in digraph.edges[digraph.get_node(start)]:
-    #     node = edge.get_destination()
-    #     node = node.get_name()
-    #     distance = edge.get_total_distance() + path[1]   # updating total distance.
-    #     outdoors = edge.get_outdoor_distance() + path[2]   # updating outdoor distance.
-    #     if node not in path[0]:   # checking in order to avoid infinite loops.
-    #         updated_path = [path[0], distance, outdoors]
-    #         new_path = get_best_path(digraph, node, end, updated_path, max_dist_outdoors, best_dist, best_path)
-    #         if new_path:
-    #             if not best_dist or new_path[1] < best_dist:   # if distance on current path shorter than best one,
-    #                 best_path, best_dist = new_path[0], new_path[1]   # update and sign new best distance and path.
-    #     else:
-    #         print(f'{node} node is already in your path!')
-    # return best_path, best_dist
    
     
 # print(get_best_path(load_map('mit_map.txt'),'32','33',[[],0,0],100,None,None))
@@ -193,7 +172,7 @@ def directed_dfs(digraph, start, end, max_total_dist, max_dist_outdoors):
         If there exists no path that satisfies max_total_dist and
         max_dist_outdoors constraints, then raises a ValueError.
     """
-    path = [[], 0, 0]   # Initial empty path.
+    path = [[], 0, 0]  
     result = get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist=None, best_path=None)
     if result[1] is None:
         print('There is no result that meets constraints!')
