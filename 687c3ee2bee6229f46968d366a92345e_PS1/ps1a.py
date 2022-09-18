@@ -103,24 +103,31 @@ def brute_force_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
-    dict=cows
-    parts=get_partitions(cows)
-    updated_list=[]
-    
-    for partition in parts:
+    dict_cows=cows
+    partitions=get_partitions(cows)
+    possible_partition=[]
+    for partition in partitions:
         break_out_flag=False
-        for combo in partition:
+        for spaceships in partition:
             total_weight=0
-            for j in combo:
-                total_weight+=dict[j]
+            for cow in spaceships:
+                total_weight=total_weight+dict_cows[cow]
                 if total_weight>limit:
                     break_out_flag=True
                     break
-            if break_out_flag:
-                break     
+            if break_out_flag==True:
+                break
         if break_out_flag==False:
-                updated_list.append([partition,len(partition)])      
-    return  sorted(updated_list,key=lambda updated_list:updated_list[:][1])[0]
+            possible_partition.append(partition)
+    possible_partition=sorted(possible_partition,key=lambda x:len(x),reverse=False)
+    for x in range(len(possible_partition)):
+        if len(possible_partition[x])==len(possible_partition[0]):     
+            yield possible_partition[x] #This is going to print all the optimum solution(with least spaceships).
+#  # Test for brute force:
+# cows = load_cows("ps1_cow_data.txt")
+# for possible_answer in brute_force_cow_transport(cows,12):
+#     print(possible_answer)               
+                
 # Problem 4
 def compare_cow_transport_algorithms():
     """
@@ -136,7 +143,7 @@ def compare_cow_transport_algorithms():
     Does not return anything.
     """
     # TODO: Your code here
-    cows = load_cows("ps1_cow_data.txt")
+    cows = load_cows("ps1_cow_data_2.txt")
     print("---Greedy algorithm---")
     print()
     start = time.time()
@@ -150,5 +157,5 @@ def compare_cow_transport_algorithms():
     end = time.time()
     print(end - start, "seconds")
 
-# compare_cow_transport_algorithms()
+compare_cow_transport_algorithms()
 
