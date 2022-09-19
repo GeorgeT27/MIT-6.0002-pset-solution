@@ -123,10 +123,8 @@ def brute_force_cow_transport(cows,limit=10):
     for x in range(len(possible_partition)):
         if len(possible_partition[x])==len(possible_partition[0]):     
             yield possible_partition[x] #This is going to print all the optimum solution(with least spaceships).
-#  # Test for brute force:
-# cows = load_cows("ps1_cow_data.txt")
-# for possible_answer in brute_force_cow_transport(cows,12):
-#     print(possible_answer)               
+    
+               
                 
 # Problem 4
 def compare_cow_transport_algorithms():
@@ -145,15 +143,13 @@ def compare_cow_transport_algorithms():
     # TODO: Your code here
     cows = load_cows("ps1_cow_data_2.txt")
     print("---Greedy algorithm---")
-    print()
     start = time.time()
-    print(greedy_cow_transport(cows))
+    greedy_cow_transport(cows)
     end = time.time()
-    print(end - start, "seconds")
+    print(end - start, "seconds \n" )
     print("---Brute force algorithm---")
-    print()
     start = time.time()
-    print(brute_force_cow_transport(cows))
+    brute_force_cow_transport(cows)
     end = time.time()
     print(end - start, "seconds")
 
